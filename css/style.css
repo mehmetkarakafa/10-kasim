@@ -53,20 +53,12 @@ img { max-width: 100%; display: block; }
 .skip-link:focus { top: 12px; }
 
 /* ---------- Film grain ---------- */
+/* Sabit doku: hareket etmez, ekranda titreme/sallanma yaratmaz */
 .grain {
-  position: fixed; inset: -50%;
+  position: fixed; inset: 0;
   z-index: 50; pointer-events: none;
-  opacity: .045;
-  background-size: 180px 180px;
-  animation: grain 1.1s steps(6) infinite;
-}
-@keyframes grain {
-  0%   { transform: translate(0, 0); }
-  20%  { transform: translate(-3%, 2%); }
-  40%  { transform: translate(2%, -4%); }
-  60%  { transform: translate(-4%, -1%); }
-  80%  { transform: translate(3%, 3%); }
-  100% { transform: translate(0, 0); }
+  opacity: .04;
+  background-size: 160px 160px;
 }
 
 /* ---------- Ortak butonlar ---------- */
@@ -417,7 +409,7 @@ body:not(.is-intro) .main { opacity: 1; }
 
 /* Dokunmatik / küçük ekran: grain sabit, ekran kadar ve daha hafif */
 @media (max-width: 760px), (hover: none) {
-  .grain { inset: 0; animation: none; opacity: .035; }
+  .grain { opacity: .035; }
   .intro { background: radial-gradient(ellipse 120% 70% at 50% 42%, #0b0a09 0%, var(--ink) 75%); }
 }
 
@@ -426,7 +418,6 @@ body:not(.is-intro) .main { opacity: 1; }
    ========================================================== */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .grain { animation: none; }
   .reveal-intro { animation-duration: .01s; animation-delay: 0s !important; filter: none; transform: none; }
   .reveal { transform: none; transition-duration: .4s; }
   .caption__line, .caption__vow, .stage__controls { transition-duration: .4s !important; transition-delay: 0s !important; transform: none; filter: none; }
