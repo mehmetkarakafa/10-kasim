@@ -29,7 +29,10 @@
   function paintGrain(el) {
     if (!el) return;
     try {
-      const size = 180;
+      // Doku cihaz pikseli çözünürlüğünde üretilir: yüksek yoğunluklu telefon
+      // ekranlarında iri lekeler yerine ince, film gibi bir tane oluşur.
+      const dpr = Math.min(window.devicePixelRatio || 1, 3);
+      const size = Math.round(160 * dpr);
       const c = document.createElement("canvas");
       c.width = c.height = size;
       const ctx = c.getContext("2d");
@@ -42,6 +45,7 @@
       }
       ctx.putImageData(img, 0, 0);
       el.style.backgroundImage = `url(${c.toDataURL("image/png")})`;
+      el.style.backgroundSize = `${size / dpr}px ${size / dpr}px`;
     } catch (e) {
       el.remove(); // dokunun üretilememesi deneyimi bozmamalı
     }

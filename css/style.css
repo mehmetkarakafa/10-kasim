@@ -415,6 +415,12 @@ body:not(.is-intro) .main { opacity: 1; }
   .stage__canvas.is-interactive { cursor: default; }
 }
 
+/* Dokunmatik / küçük ekran: grain sabit, ekran kadar ve daha hafif */
+@media (max-width: 760px), (hover: none) {
+  .grain { inset: 0; animation: none; opacity: .035; }
+  .intro { background: radial-gradient(ellipse 120% 70% at 50% 42%, #0b0a09 0%, var(--ink) 75%); }
+}
+
 /* ==========================================================
    AZALTILMIŞ HAREKET
    ========================================================== */

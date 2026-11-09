@@ -248,8 +248,10 @@
       // Kenar maskesi son görüntüye de uygulanır (karanlıktaki kareler bile kenarda kaybolur)
       this.maskX = new Float32Array(W);
       this.maskY = new Float32Array(H);
-      for (let x = 0; x < W; x++) this.maskX[x] = smooth(x / (W * 0.1)) * smooth((W - x) / (W * 0.1));
-      for (let y = 0; y < H; y++) this.maskY[y] = smooth(y / (H * 0.03)) * smooth((H - y) / (H * 0.12));
+      // Mobilde mozaik ekranı boydan boya kapladığı için kenarlar daha geniş erir
+      const ex = this.cols <= 30 ? 0.17 : 0.1, ey = this.cols <= 30 ? 0.07 : 0.03;
+      for (let x = 0; x < W; x++) this.maskX[x] = smooth(x / (W * ex)) * smooth((W - x) / (W * ex));
+      for (let y = 0; y < H; y++) this.maskY[y] = smooth(y / (H * ey)) * smooth((H - y) / (H * 0.14));
       for (let y = 0; y < H; y++) {
         // Dikdörtgenin sert kenarı görünmesin: alt kenar (omuzlar) daha geniş erir
         const fy = smooth(y / (H * 0.06)) * smooth((H - y) / (H * 0.22));
@@ -389,12 +391,14 @@
                 let v = adj * (1 - ALPHA) + tg[trow + xx] * ALPHA;
                 if (edgeY || xx === s - 1) v *= 0.72;        // kareler arası ince derz
                 v *= this.maskX[q * s + xx] * this.maskY[r * s + yy];
-                v = v < 0 ? 0 : v > 255 ? 255 : v;
+                // En koyu gölgeler sayfanın siyahına (#050505) otursun; gri bir kutu kalmasın
+                v = v - 9;
+                v = v < 0 ? 0 : v > 246 ? 246 : v;
                 const p = (trow + xx) * 4;
                 // Sıcak, arşiv tonunda tek renk
-                o[p] = Math.min(255, v * 1.02 + 2);
-                o[p + 1] = v * 0.965;
-                o[p + 2] = v * 0.895;
+                o[p] = 5 + v * 1.0;
+                o[p + 1] = 5 + v * 0.945;
+                o[p + 2] = 5 + v * 0.875;
                 o[p + 3] = 255;
               }
             }
