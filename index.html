@@ -32,8 +32,18 @@
         <span class="btn-line__label">ANMA DENEYİMİNİ BAŞLAT</span>
       </button>
       <p class="intro__status" id="load-status" aria-live="polite"></p>
+      <p class="counter counter--intro" data-counter hidden>
+        <span class="counter__num" data-counter-num>0</span> kişi bu anmayı başlattı
+      </p>
     </div>
   </section>
+
+  <!-- Müzik: butona basınca başlar, buradan kapatılır -->
+  <button class="sound" id="sound-btn" type="button" aria-pressed="false" hidden>
+    <span class="sound__icon" aria-hidden="true"></span>
+    <span class="sound__label" id="sound-label">SES KAPALI</span>
+  </button>
+  <audio id="music" src="assets/audio/chopin-marche-funebre.mp3" preload="none" loop></audio>
 
   <main id="main" class="main" aria-hidden="true">
     <!-- 2. MOZAİK -->
@@ -69,6 +79,10 @@
       <p class="memorial__time-label reveal">Saat 09.05</p>
       <p class="memorial__time reveal" aria-hidden="true"><span>09</span><i>:</i><span>05</span></p>
       <p class="memorial__text reveal">“Ulu Önder Mustafa Kemal Atatürk’ü<br> saygı, minnet ve özlemle anıyoruz.”</p>
+      <p class="counter counter--memorial reveal" data-counter hidden>
+        <span class="counter__num" data-counter-num>0</span>
+        <span class="counter__label">kişi bu anmayı başlattı</span>
+      </p>
     </section>
 
     <!-- 4. KAYNAKLAR -->
@@ -81,6 +95,11 @@
           kaynak sayfasına bağlantı verir.
         </p>
         <ol class="sources__list" id="sources-list"></ol>
+        <p class="sources__note sources__music">
+          Müzik: Frédéric Chopin, Piyano Sonatı No. 2, Op. 35 – III. Cenaze Marşı (Marche funèbre).
+          Yorum: Paul Pitman (Musopen). Kamu malı.
+          <a href="https://commons.wikimedia.org/wiki/File:Chopin_Pitman_sonata_no_2_in_b_flat_minor_funeral_march_III_marche_funebre_lento.ogg" target="_blank" rel="noopener">Kaynak</a>
+        </p>
       </details>
       <footer class="footer">
         <span>10 Kasım · Bir Milletin Hafızası</span>

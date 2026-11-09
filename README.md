@@ -62,7 +62,23 @@ Hücre sayısı ekrana göre değişir: telefonda 30, tablette 40, masaüstünde
 
 - Bütün akış klavyeyle kullanılabilir: `Tab` ile başlatılır, portrede ok tuşlarıyla kareler arasında gezilir, `Enter` ile fotoğraf açılır, `Esc` ile kapanır.
 - `prefers-reduced-motion` ayarı açıksa uçuş animasyonu atlanır ve portre doğrudan belirir. Grain ve diğer geçişler de kapanır.
-- Müzik yok, sayfa hiçbir zaman kendiliğinden ses çalmaz.
+- Müzik yalnızca "Anma deneyimini başlat" butonuna basınca, 4 saniyede yumuşakça açılarak başlar. Sağ üstteki düğmeyle kapatılabilir ve bu tercih tarayıcıda hatırlanır.
+
+## Müzik
+
+Frédéric Chopin, Piyano Sonatı No. 2, Op. 35, III. bölüm: Cenaze Marşı (Marche funèbre). Bu eser Atatürk'ün cenaze töreninde de çalınmıştı.
+
+Kayıt Paul Pitman'a ait, Musopen için yapılmış ve kamu malı ([Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Chopin_Pitman_sonata_no_2_in_b_flat_minor_funeral_march_III_marche_funebre_lento.ogg)). Dosya `assets/audio/chopin-marche-funebre.mp3` yolunda: 96 kbps'ye sıkıştırıldı, 6,6 MB, 9 dakika 11 saniye. Sayfa açılınca değil, butona basılınca yüklenir.
+
+## Anmayı başlatan kişi sayısı
+
+Site statik olduğu için sayaç ücretsiz [Abacus](https://abacus.jasoncameron.dev) sayaç servisinde tutuluyor:
+
+- Butona ilk kez basan her tarayıcı **bir kez** sayılır. Aynı kişi sayfayı yenilerse sayı artmaz.
+- Sayı açılış ekranında butonun altında ve anma bölümünde görünür. Henüz kimse başlatmadıysa gizli kalır.
+- Servise ulaşılamazsa sayaç sessizce gizlenir, deneyim etkilenmez.
+- Yalnızca `github.io` üzerindeki canlı site gerçek sayacı artırır. Yerelde (`localhost`) yapılan testler ayrı bir test sayacını kullanır.
+- Sayacın anahtarı `mehmetkarakafa-10kasim/anma`. Güncel değer: `https://abacus.jasoncameron.dev/info/mehmetkarakafa-10kasim/anma`
 
 ## Dosya yapısı
 

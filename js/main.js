@@ -70,6 +70,8 @@
   async function begin() {
     if (started) return;
     started = true;
+    countVisit();
+    startMusic();          // tıklamanın içinde başlamalı, yoksa tarayıcı sesi engeller
     el.start.setAttribute("aria-busy", "true");
     loadState.waiting = true;
     showStatus(`HATIRALAR TOPLANIYOR · ${Math.round((loadState.done / loadState.total) * 100)}%`);
@@ -275,6 +277,110 @@
       else mosaic.showFinal();
     }, 260);
   });
+
+  /* ---------- Müzik ---------- */
+  // Chopin – Cenaze Marşı. Butona basınca (kullanıcı hareketiyle) yumuşakça açılır.
+  // Ziyaretçi sesi kapatırsa bu tercih tarayıcıda hatırlanır.
+  const music = $("#music");
+  const soundBtn = $("#sound-btn");
+  const soundLabel = $("#sound-label");
+  const MUSIC_VOL = 0.55;
+  let fadeRaf = 0;
+
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* gizli sekme vb. */ } },
+  };
+
+  function setSoundUi(on) {
+    soundBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    soundLabel.textContent = on ? "SES AÇIK" : "SES KAPALI";
+    soundBtn.setAttribute("aria-label", on ? "Müziği kapat" : "Müziği aç");
+  }
+
+  function fadeTo(target, ms, done) {
+    cancelAnimationFrame(fadeRaf);
+    const from = music.volume, t0 = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / ms);
+      try { music.volume = from + (target - from) * p; } catch (e) { /* iOS ses düzeyi salt okunur */ }
+      if (p < 1) fadeRaf = requestAnimationFrame(step);
+      else if (done) done();
+    };
+    fadeRaf = requestAnimationFrame(step);
+  }
+
+  function musicOn() {
+    try { music.volume = 0; } catch (e) {}
+    const p = music.play();
+    setSoundUi(true);
+    if (p && p.catch) p.catch(() => setSoundUi(false));   // tarayıcı engellerse sessiz kal
+    fadeTo(MUSIC_VOL, 4000);
+  }
+
+  function musicOff() {
+    setSoundUi(false);
+    fadeTo(0, 900, () => music.pause());
+  }
+
+  soundBtn.addEventListener("click", () => {
+    const on = soundBtn.getAttribute("aria-pressed") !== "true";
+    store.set("anma-ses", on ? "acik" : "kapali");
+    if (on) musicOn(); else musicOff();
+  });
+  music.addEventListener("error", () => { soundBtn.hidden = true; });
+
+  function startMusic() {
+    soundBtn.hidden = false;
+    if (store.get("anma-ses") === "kapali") { setSoundUi(false); return; }
+    musicOn();
+  }
+
+  /* ---------- Anmayı başlatan kişi sayısı ---------- */
+  // Ücretsiz Abacus sayaç servisi. Her tarayıcı yalnızca bir kez sayılır.
+  // Yerel testler gerçek sayacı etkilemesin diye ayrı bir anahtar kullanır.
+  const COUNTER_API = "https://abacus.jasoncameron.dev";
+  const COUNTER_NS = "mehmetkarakafa-10kasim";
+  const COUNTER_KEY = /github\.io$/.test(location.hostname) ? "anma" : "anma-test";
+  const counterEls = document.querySelectorAll("[data-counter]");
+
+  function showCount(n) {
+    if (typeof n !== "number" || n < 0) return;
+    const text = n.toLocaleString("tr-TR");
+    counterEls.forEach((el) => {
+      el.querySelector("[data-counter-num]").textContent = text;
+      el.hidden = n === 0;    // henüz kimse yoksa "0 kişi" yazmasın
+    });
+  }
+
+  async function counterCall(action) {
+    const ctrl = "AbortController" in window ? new AbortController() : null;
+    const timer = ctrl && setTimeout(() => ctrl.abort(), 6000);
+    try {
+      const r = await fetch(`${COUNTER_API}/${action}/${COUNTER_NS}/${COUNTER_KEY}`,
+        { signal: ctrl && ctrl.signal, cache: "no-store" });
+      if (!r.ok) return null;
+      const d = await r.json();
+      if (typeof d.value !== "number") return null;
+      return Math.max(0, d.value);                          // "info": henüz sayılmamışsa -1 döner
+    } catch (e) {
+      return null;                                          // servis yoksa sayaç gizli kalır
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }
+
+  // "info" anahtar yokken de 200 döner; konsolda 404 hatası oluşmaz
+  counterCall("info").then(showCount);
+
+  function countVisit() {
+    const counted = store.get("anma-sayildi") === "1";
+    counterCall(counted ? "info" : "hit").then((n) => {
+      if (n === null) return;
+      if (!counted) store.set("anma-sayildi", "1");
+      showCount(n);
+    });
+  }
 
   /* ---------- Başlat ---------- */
   fx.paintGrain(document.querySelector(".grain"));
