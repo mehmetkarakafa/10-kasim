@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>10 Kasım – Bir Milletin Hafızası</title>
+  <meta name="description" content="100 tarihî fotoğrafın bir araya gelerek tek bir Atatürk portresi oluşturduğu dijital anma eseri.">
+  <meta name="theme-color" content="#050505">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23a3161c'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/images/ataturk-main.jpg" as="image">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="is-intro">
+  <a class="skip-link" href="#anma">Anma bölümüne geç</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- 1. AÇILIŞ -->
+  <section class="intro" id="intro" aria-labelledby="intro-title">
+    <div class="intro__center">
+      <p class="intro__date reveal-intro" style="--d: .4s">10 KASIM</p>
+      <h1 class="intro__title reveal-intro" id="intro-title" style="--d: 1.4s"><span>ATATÜRK’Ü</span> <span>ANMA GÜNÜ</span></h1>
+      <span class="intro__rule reveal-intro" style="--d: 2.4s" aria-hidden="true"></span>
+      <p class="intro__years reveal-intro" style="--d: 2.8s">10 Kasım 1938 <span aria-hidden="true">–</span> Sonsuza Dek</p>
+    </div>
+
+    <div class="intro__bottom">
+      <p class="intro__quote reveal-intro" style="--d: 3.8s">Bir milletin hafızasında, bir ömrün ötesinde...</p>
+      <button class="btn-line reveal-intro" id="start-btn" type="button" style="--d: 4.6s">
+        <span class="btn-line__label">ANMA DENEYİMİNİ BAŞLAT</span>
+      </button>
+      <p class="intro__status" id="load-status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <main id="main" class="main" aria-hidden="true">
+    <!-- 2. MOZAİK -->
+    <section class="stage" id="stage" aria-label="100 fotoğraftan oluşan Atatürk portresi">
+      <div class="stage__frame" id="stage-frame">
+        <canvas class="stage__canvas" id="mosaic" tabindex="-1"
+                role="img" aria-label="100 tarihî fotoğraftan oluşan Mustafa Kemal Atatürk portresi"></canvas>
+        <div class="loupe" id="loupe" aria-hidden="true"><canvas id="loupe-canvas"></canvas></div>
+        <div class="cell-tip" id="cell-tip" aria-hidden="true">
+          <img id="cell-tip-img" alt="">
+          <span id="cell-tip-text"></span>
+        </div>
+      </div>
+
+      <div class="stage__caption" id="caption" aria-live="polite">
+        <p class="caption__lines">
+          <span class="caption__line">100 kare, tek bir ömür.</span>
+          <span class="caption__line">Bir milletin kalbinde sonsuza dek.</span>
+        </p>
+        <p class="caption__vow">İZİNİZDEN YÜRÜMEYE DEVAM EDİYORUZ.</p>
+      </div>
+
+      <div class="stage__controls" id="controls">
+        <button class="btn-text" id="replay-btn" type="button">TEKRAR İZLE</button>
+        <span class="stage__hint" id="hint">Portrenin üzerinde gezinin, her kare bir hatıra.</span>
+        <a class="btn-text" href="#anma">AŞAĞI</a>
+      </div>
+    </section>
+
+    <!-- 3. ANMA -->
+    <section class="memorial" id="anma" aria-labelledby="memorial-title">
+      <p class="memorial__date reveal" id="memorial-title">10 KASIM 1938</p>
+      <p class="memorial__time-label reveal">Saat 09.05</p>
+      <p class="memorial__time reveal" aria-hidden="true"><span>09</span><i>:</i><span>05</span></p>
+      <p class="memorial__text reveal">“Ulu Önder Mustafa Kemal Atatürk’ü<br> saygı, minnet ve özlemle anıyoruz.”</p>
+    </section>
+
+    <!-- 4. KAYNAKLAR -->
+    <section class="sources" aria-labelledby="sources-title">
+      <details class="sources__details reveal">
+        <summary id="sources-title">Fotoğraf kaynakları <span>100 kare</span></summary>
+        <p class="sources__note">
+          Portrede kullanılan fotoğrafların tamamı Wikimedia Commons arşivinden alınmış,
+          kamu malı (public domain) olarak işaretlenmiş tarihî fotoğraflardır. Her kare,
+          kaynak sayfasına bağlantı verir.
+        </p>
+        <ol class="sources__list" id="sources-list"></ol>
+      </details>
+      <footer class="footer">
+        <span>10 Kasım · Bir Milletin Hafızası</span>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Fotoğraf inceleme paneli -->
+  <dialog class="viewer" id="viewer" aria-labelledby="viewer-caption">
+    <figure class="viewer__figure">
+      <img id="viewer-img" alt="">
+      <figcaption id="viewer-caption"></figcaption>
+    </figure>
+    <button class="btn-text viewer__close" id="viewer-close" type="button">KAPAT</button>
+  </dialog>
+
+  <script src="js/photo-data.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/mosaic.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
